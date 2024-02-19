@@ -4,6 +4,8 @@ format:
      footer: "Heidelberg University Hospital   |   February 2024  |   Ignacio Leiva-Escobar"
 incremental: false
 embed-resources: true
+editor:
+  render-on-save: true
 
 ---
 
@@ -17,14 +19,60 @@ embed-resources: true
 
 ::: {style="position: absolute; left: 0px; top: 350px; height: 370px; width: 800px; border:0px solid #D9D9D9 ;background-color: #ffffff; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
 
-[TREND-REVIVAL]{style="font-size: 1.6em; font-weight: bold;color: rgb(0, 74, 111)"}
+[Propensity Score in]{style="font-size: 1.6em; font-weight: bold;color: rgb(0, 74, 111)"}
+[Pharmacoepidemiolgy]{style="font-size: 1.4em; font-weight: bold;color: #404080"}
 
-[February 2024 | Ignacio Leiva-Escobar]{style="font-size: 35px; color: rgb(0, 74, 111)"}
+[Ignacio Leiva-Escobar, MSc]{style="font-size: 35px; color: rgb(0, 74, 111)"}
 :::
 
 
+## {}
+
+::: {style="position: absolute; right: 0px; top: 0px; height: 450px; width: 300px; border:0px solid #D9D9D9 ;background-color: #ffffff; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+
+```{r}
+library(tidyverse)
+library(viridis)
+library(hrbrthemes)
+currentDataset <- read_csv("https://raw.githubusercontent.com/gckc123/ExampleData/main/smoking_psyc_distress.csv")
+
+formula <- as.formula(smoker ~ sex + age + indigeneity + high_school + partnered + remoteness + language + risky_alcohol)
+data <- glm(formula , family = "binomial", currentDataset)
+
+currentDataset$ps <- predict(data, type = "response")
+
+currentDataset %>%
+  mutate(gender = ifelse(sex == 0, "Female", "Male")) %>%
+ggplot(aes(x = gender, y = ps, fill = gender)) +
+    geom_boxplot() +
+    scale_fill_viridis(discrete = TRUE, alpha=0.6, option="D") +
+    theme_ipsum() +
+  coord_flip() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11),
+      axis.title.y = element_blank(),
+      axis.title.x = element_blank()
+    ) +
+    labs(title = "Propensity Scores by Gender")
 
 
+```
+:::
+
+::: {style="position: absolute; right: 300px; top: 0px; height: 450px; width: 300px; border:0px solid #D9D9D9 ;background-color: #ffffff; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+
+```{r}
+currentDataset %>% 
+    mutate(gender = ifelse(sex == 0, "Female", "Male")) %>%
+  ggplot(aes(x = ps, group = gender, fill = gender)) +
+         geom_density(alpha = .6) +
+  scale_fill_manual(values =c("#404080", "#69b3a2")) +
+  # scale_fill_viridis(discrete = TRUE, alpha=0.6, option="D") +
+   theme_ipsum() 
+
+```
+:::
 ## Need and significance
 
 
@@ -89,9 +137,6 @@ An integration of the use of `validated real-world data` sources and `multi-stat
 
 ## Multi-state model
 
-
-
-
 ```{r}
 #| echo: false
 #| fig-width: 100
@@ -103,6 +148,7 @@ C-->D[Square One];C-->E[Square Two];
 "
  )
 ```
+
 
 ## fffff
 
