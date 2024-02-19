@@ -1,0 +1,239 @@
+---
+format: 
+  hkhd-revealjs:
+     footer: "Heidelberg University Hospital   |   February 2024  |   Ignacio Leiva-Escobar"
+incremental: false
+embed-resources: true
+
+---
+
+## {}
+
+
+![](images/logo.png){.absolute top=0 width="240" height="240"}
+
+![](images/image.png){.absolute top=0 right=0 width="700" height="230"}
+
+
+::: {style="position: absolute; left: 0px; top: 350px; height: 370px; width: 800px; border:0px solid #D9D9D9 ;background-color: #ffffff; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+
+[TREND-REVIVAL]{style="font-size: 1.6em; font-weight: bold;color: rgb(0, 74, 111)"}
+
+[February 2024 | Ignacio Leiva-Escobar]{style="font-size: 35px; color: rgb(0, 74, 111)"}
+:::
+
+
+
+
+## Need and significance
+
+
+
+> Extend trial finding into real-world settings
+
+  - Inclusion/exclusion criteria
+  - Heterogeneity and complex treatment regimens
+
+> Natural course of diseases
+
+  - Endpoint selection 
+  - Evaluation of multiple disease states
+
+
+## What TREND-REVIVAL offers
+
+An integration of the use of `validated real-world data` sources and `multi-state models` to:
+
+-  Provide the necessary regulatory information
+-  Predict success in RW treatment situations
+-  Support the RCT design to increase success rates in clinical development
+
+## Project Overview
+
+![](images_presentation/project_overview.png)
+
+# {background-color="#004a6f"}
+
+[Extending RCT inferences]{style="font-size: 1.6em; font-weight: bold;color: white"}
+
+
+
+## Extending RCT inferences
+
+-  Conduct transportability analysis using
+   - Either IPW or outcome model-based approach
+   - Validation process due to the target and target population differences
+   - Variables measurement 
+
+- Use of individual patient data from RCTs: `Outcome, exposure and covariate`
+- Use of individual patient in RW: Only `covariates` (also possible to use summary-level information)
+
+## Extending RCT inferences: critical points
+
+- Check the identifiability conditions
+- Identify relevant effect modifiers
+- Level of agreement between the predicted treatment effect and the observed
+
+# {background-color="#004a6f"}
+
+[Multi-state modelling]{style="font-size: 1.6em; font-weight: bold;color: white"}
+
+
+
+## Overall
+
+- Provide more detailed insights about the course of diseases
+  - Hazard of transition (intensity), probability of transition, time spent in a state
+  
+- Evaluate the effect of covariates on transitions
+
+## Multi-state model
+
+
+
+
+```{r}
+#| echo: false
+#| fig-width: 100
+
+
+library(DiagrammeR)
+DiagrammeR("graph LR;A(Rounded)-->B[Squared];B-->C{A Decision};
+C-->D[Square One];C-->E[Square Two];
+"
+ )
+```
+
+## fffff
+
+```{mermaid}
+%%| fig-width: 15
+%%{init: {'themeVariables': { 'primaryColor': '#00ff00',"fontSize": "10px"}}}%%
+        graph LR
+          A["Target Population #25;"] -->|"Covariates #32;"| C["Model #32;"]
+          B["Trial Population #32;"] -->|"Covariates <br> outcome <br> treatment #32;" <br>.| C["Model #32;"]
+          C --> D["Re-weighted <br> trial population #32;" <br>.]
+          
+
+```
+
+
+# New topic! {background-color="#004a6f"}
+
+To make a slide like this, use:
+
+    # Title of slide {background-color="#562457"}
+
+## Tabset example
+
+::: panel-tabset
+## Example 1
+
+Content here for tabset 1 :)
+
+## Example 2
+
+More content here, for tabset 2 :)
+:::
+
+## Incremental content
+
+Hi! 
+
+. . .
+
+
+Use `. . .` to separate content as an incremental slide!
+
+
+## You can add R code
+
+```{r}
+#| echo: true
+library(dplyr)
+library(ggplot2)
+g <- starwars |> 
+  ggplot() +
+  geom_point(aes(x = height, y = mass)) +
+  theme_light()
+```
+
+## And show the results aswell :)
+
+```{r}
+#| fig.align: center
+#| echo: true
+g 
+```
+
+## What about tables? {.smaller}
+
+### `knitr::kable()`
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| label: kable-ex
+#| echo: true
+#| eval: false
+tab <- starwars |>
+  tidyr::drop_na(species) |> 
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_heigth = round(mean(height, na.rm = TRUE)),
+    mean_mass = round(mean(mass, na.rm = TRUE))
+  ) |> 
+  slice_max(order_by = n, n = 4) 
+
+knitr::kable(tab)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| label: kable-ex
+#| eval: true
+```
+:::
+:::
+
+## `DT::datatable()` {.smaller}
+
+With the `smaller` class in the slide!
+Ex: `## slide name {.smaller}`
+
+```{r}
+DT::datatable(tab, options = list(pageLength = 5))
+```
+
+## `gt::gt()`
+
+```{r}
+gt::gt(tab)
+```
+
+## `reactable::reactable()`
+
+```{r}
+reactable::reactable(tab)
+```
+
+## Diagrams with Mermaid!
+
+Read about how to create a diagram in this [post by Mine Çetinkaya-Rundel](https://mine-cetinkaya-rundel.github.io/quarto-tip-a-day/posts/21-diagrams/).
+
+<center>
+<blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/quartotip?src=hash&amp;ref_src=twsrc%5Etfw">#quartotip</a> 21: Create diagrams in Quarto documents using Mermaid or Graphviz in executable code cells, similar to how you create figures.<br><br>Read more: <a href="https://t.co/3qx9oSNCay">https://t.co/3qx9oSNCay</a> <a href="https://t.co/fYzGcISl4h">pic.twitter.com/fYzGcISl4h</a></p>&mdash; Quarto (@quarto_pub) <a href="https://twitter.com/quarto_pub/status/1549271325943947270?ref_src=twsrc%5Etfw">July 19, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center>
+
+
+## Exporting into PDF
+
+You can use the function `pagedown::chrome_print()` to print the HTML version into a PDF!
+
+```r
+pagedown::chrome_print("path-to-file.html")
+```
+
+
