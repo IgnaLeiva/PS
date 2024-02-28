@@ -1,0 +1,171 @@
+/*-- scss:defaults --*/
+// importing fonts
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&family=Lato&family=Yanone+Kaffeesatz&display=swap');
+
+// fonts
+$font-family-sans-serif: sans-serif !default;
+
+// headings
+$presentation-heading-font: sans-serif  !default;
+$presentation-heading-color: rgb(0, 74, 111) !default;
+$presentation-heading-align: center !default;
+$h1-font-size: 1.6em !default;
+$h2-font-size: 1.3em !default;
+$h3-font-size: 1.15em !default;
+
+//code
+$code-color: rgb(0, 74, 111) !default;
+$font-family-monospace: 'Inconsolata', monospace  !default;
+
+
+
+
+// general  
+$body-bg: #fff;
+$body-color: rgb(84, 84, 85);
+$link-color: rgb(0, 74, 111);
+$presentation-font-size-root: 35px;
+
+
+/*-- scss:rules --*/
+.reveal pre code {
+  background-color: #f8f8f8;
+  font-size: 1em;
+  padding: 0.5em;
+  line-height: 1.2em;
+}
+
+
+.subtitle {
+  color: $body-bg;
+  font-size: $h2-font-size;
+  font-family: $presentation-heading-font;
+}
+
+.author {
+  color: $body-bg;
+  font-size: $h2-font-size;
+  font-family: $presentation-heading-font;
+}
+
+/*-- 
+
+.footer {
+    position: fixed;
+    bottom:0px;
+    height: 40px;
+    width: 500% !important;
+    margin: 0 auto;
+    text-align: center;
+    border-top: 2px solid #6ce6d5;
+    background: white;
+    z-index: 100;
+} --*/
+
+
+.footer {
+  position: absolute;
+  font-family: $presentation-heading-font;
+  padding-top: 0em;
+  bottom: 0px;
+  padding-bottom: 0em;
+  text-align: left;
+} 
+
+
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: -10px; /* Adjust this value to change the distance from the top of the footer */
+  left: 12%;
+  width: 75%; /* Adjust this value to change the width of the line */
+  border-top: 1px solid rgb(0, 74, 111); /* Adjust this value to change the thickness and color of the line */
+}
+
+
+/*-- 
+.reveal .footer {
+    font-family: $presentation-heading-font;
+    display: block;
+    position: fixed;
+    bottom: 18px;
+    width: 100%;
+    margin: 0px -20px;
+    text-align: right;
+    font-size: 18px;
+    z-index: 2;
+} --*/
+
+.reveal .slide-number {
+  font-family: $presentation-heading-font;
+
+}
+
+.reveal .panel-tabset [role=tab] {
+    font-size: 0.8em;
+}
+
+
+.reveal .footer {
+    color: rgb(0, 74, 111);
+    text-align: left;
+}
+
+
+
+
+
+.center-x{
+    text-align: center;
+}
+
+section.has-dark-background a, section.has-dark-background a:hover {
+    color: #fee4ff;
+}
+
+
+.slide-logo {
+  display: block !important;
+  position: fixed !important;
+  bottom: 5px !important;
+  right: 5px !important;
+  max-height: 15% !important;
+  height: 10% !important;
+  width: auto !important;
+  color: $body-color !important;
+}
+
+.slide-number, .reveal.has-logo .slide-number {
+  bottom: 10px !important;
+  right: 10px !important;
+  top: unset !important;
+  color: $body-color !important;
+}
+
+
+
+li {
+  list-style-type: none;
+}
+
+li::before {
+  display:          inline-block;
+  align-items: center;
+  color: rgb(0, 74, 111);
+  margin-right:     5px;
+  content:          '■'
+}
+
+/*-- scss:rules 
+li::before {
+  display:          inline-block;
+  vertical-align:   middle;
+  width:            10px;
+  height:           25px;
+  background-color: #404080;
+  margin-right:     5px;
+  content:          '    '
+}
+
+--*/
