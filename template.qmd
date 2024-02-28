@@ -1,0 +1,314 @@
+---
+format: 
+  hkhd-revealjs:
+     footer: "Heidelberg University Hospital   |   February 2024  |   Ignacio Leiva-Escobar"
+incremental: false
+embed-resources: true
+editor:
+  render-on-save: true
+
+---
+
+
+## {}
+
+
+:::{style="position: absolute; right: 840px; top: 0px; height: 245px; width: 245px; border:0px solid #D9D9D9 ;background-image: url('images/logo.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+:::
+
+
+:::{style="position: absolute; left: 295px; top: 0px; height: 245px; width: 245px; border:1px solid #D9D9D9 ;background-image: url('plot/plot_B.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+:::
+
+
+:::{style="position: absolute; right: 235px; top: 0px; height: 245px; width: 245px; border:1px solid #D9D9D9 ;background-image: url('plot/plot_C.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+:::
+
+
+:::{style="position: absolute; left: 840px; top: 0px; height: 245px; width: 245px; border:1px solid #D9D9D9 ;background-image: url('plot/plot_A.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+:::
+
+
+::: {style="position: absolute; right: 280px; top: 350px; height: 370px; width: 800px; border:0px solid #D9D9D9 ;background-color: #ffffff; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+
+[Propensity Score in]{style="font-size: 1.6em; font-weight: bold;color: rgb(0, 74, 111)"}
+[Pharmacoepidemiolgy]{style="font-size: 1.4em; font-weight: bold;color: #404080"}
+
+[Ignacio Leiva-Escobar, MSc]{style="font-size: 35px; color: rgb(0, 74, 111)"}
+:::
+
+## Goals
+
+
+<br>
+
+>  **Briefly introduce the concept of casal effect**
+
+<br>
+
+> **Understand the role of propensity score in pharmacoepidemiology**
+
+# {background-color="#004a6f"}
+
+
+
+
+[Causal Effect Estimation]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
+
+## Causal Effect Estimation
+
+<br>
+
+`Causal effect` are of interest in many field
+
+-  Prove ***causation*** over merely ***correlation***
+
+Causal effect describes the `effect` of an exposure on an outcome
+
+-  New treatment 
+-  Prevention program
+-  New policy
+
+::: {.notes}
+Here interesting in knowning how would a outcome of patient change. I are not interested in just knowing if there is a significant correlation/assicauton between the treatment and the outcome. We really wanna know if there is a causal effect.
+:::
+
+## Motivating example
+
+Case study objective: To estimate the causal effect of IPP versus H2RA on the risk of upper gastrointestinal bleeding in patients with atrial fibrillation
+
+::: {.notes}
+The idea is to know if treatment A is more effective than treatment B.
+We have to acknowledge people who is receiving treatment A is different from people who is receiving treatment B. And we need to deal with that in order to estimate the causal effect of the treatment.
+
+Then not bear in mind that the analysis of longitunal data benefit from these analysis
+
+:::
+
+## How to get causal effect estimates
+
+Machine time
+figure
+What would happen if got the treatment 
+
+++ fundamental problem of causal inference
+
+## How to get causal effect estimates
+
+![](images_presentation/false.jpg)
+
+## How to get causal effect estimates
+
+![](images_presentation/falseEffect.png)
+
+## How to get causal effect estimates
+
+![](images_presentation/CausalEffect.png)
+
+## How to get causal effect estimates
+
+![](images_presentation/ce_case.png)
+
+
+## How to get causal effect estimates
+
+![](images_presentation/ce_case.png)
+
+:::{style="position: absolute; left: 820px; top: 190px; height: 170px; width: 280px; border:1.5px solid rgb(0, 74, 111) ;padding: 3px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
+
+[**Fundamental problem of causal inference**]{style="position: absolute; font-size: 1em;color: rgb(0, 74, 111); text-align: center; vertical-align:"}
+
+:::
+## Potential outcome framework
+
+- Two potential outcome for each study paticiapnt:
+
+Outcome after receiving treatment = Y1
+Outcome after receiving comparsion condition = Y0 (can be another treatmen or not treatment control)
+
+- Y1 and Y0 exist for all individual in the population regardsles of whether the individual received treatment (Z=1) or comparison condition (Z = 0)
+- Observe obly on of these outcomes for each participant
+- Then the causal effect will be Y1-Y0 for a given individual
+
+
+## Primary types of causal effect
+
+- ATE
+
+Answers the question:
+
+   - how effective is the treatment in the population? If you have a control 
+   - What is the relative effectiveness of two treatments  on average in the population? (If you hace 2 treatments)
+   - E(Y1 - Y0)
+
+
+- ATT
+
+Answer the question
+
+- How effective is a particular treatment for a particular population (the target group)
+- How would those who received treatment have done had they received the comparison condition? ***
+- E(Y1 - Y0 | Z =1)
+
+  
+# {background-color="#004a6f"}
+
+[Multi-state modelling]{style="font-size: 1.6em; font-weight: bold;color: white"}
+
+
+
+## Overall
+
+- Provide more detailed insights about the course of diseases
+  - Hazard of transition (intensity), probability of transition, time spent in a state
+  
+- Evaluate the effect of covariates on transitions
+
+## Multi-state model
+
+```{r}
+#| echo: false
+#| fig-width: 100
+
+
+library(DiagrammeR)
+DiagrammeR("graph LR;A(Rounded)-->B[Squared];B-->C{A Decision};
+C-->D[Square One];C-->E[Square Two];
+"
+ )
+```
+
+
+## fffff
+
+```{mermaid}
+%%| fig-width: 15
+%%{init: {'themeVariables': { 'primaryColor': '#00ff00',"fontSize": "10px"}}}%%
+        graph LR
+          A["Target Population #25;"] -->|"Covariates #32;"| C["Model #32;"]
+          B["Trial Population #32;"] -->|"Covariates <br> outcome <br> treatment #32;" <br>.| C["Model #32;"]
+          C --> D["Re-weighted <br> trial population #32;" <br>.]
+          
+
+```
+
+
+# New topic! {background-color="#004a6f"}
+
+To make a slide like this, use:
+
+    # Title of slide {background-color="#562457"}
+
+## Tabset example
+
+::: panel-tabset
+## Example 1
+
+Content here for tabset 1 :)
+
+## Example 2
+
+More content here, for tabset 2 :)
+:::
+
+## Incremental content
+
+Hi! 
+
+. . .
+
+
+Use `. . .` to separate content as an incremental slide!
+
+
+## You can add R code
+
+```{r}
+#| echo: true
+library(dplyr)
+library(ggplot2)
+g <- starwars |> 
+  ggplot() +
+  geom_point(aes(x = height, y = mass)) +
+  theme_light()
+```
+
+## And show the results aswell :)
+
+```{r}
+#| fig.align: center
+#| echo: true
+g 
+```
+
+## What about tables? {.smaller}
+
+### `knitr::kable()`
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| label: kable-ex
+#| echo: true
+#| eval: false
+tab <- starwars |>
+  tidyr::drop_na(species) |> 
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_heigth = round(mean(height, na.rm = TRUE)),
+    mean_mass = round(mean(mass, na.rm = TRUE))
+  ) |> 
+  slice_max(order_by = n, n = 4) 
+
+knitr::kable(tab)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| label: kable-ex
+#| eval: true
+```
+:::
+:::
+
+## `DT::datatable()` {.smaller}
+
+With the `smaller` class in the slide!
+Ex: `## slide name {.smaller}`
+
+```{r}
+DT::datatable(tab, options = list(pageLength = 5))
+```
+
+## `gt::gt()`
+
+```{r}
+gt::gt(tab)
+```
+
+## `reactable::reactable()`
+
+```{r}
+reactable::reactable(tab)
+```
+
+## Diagrams with Mermaid!
+
+Read about how to create a diagram in this [post by Mine Çetinkaya-Rundel](https://mine-cetinkaya-rundel.github.io/quarto-tip-a-day/posts/21-diagrams/).
+
+<center>
+<blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/quartotip?src=hash&amp;ref_src=twsrc%5Etfw">#quartotip</a> 21: Create diagrams in Quarto documents using Mermaid or Graphviz in executable code cells, similar to how you create figures.<br><br>Read more: <a href="https://t.co/3qx9oSNCay">https://t.co/3qx9oSNCay</a> <a href="https://t.co/fYzGcISl4h">pic.twitter.com/fYzGcISl4h</a></p>&mdash; Quarto (@quarto_pub) <a href="https://twitter.com/quarto_pub/status/1549271325943947270?ref_src=twsrc%5Etfw">July 19, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center>
+
+
+## Exporting into PDF
+
+You can use the function `pagedown::chrome_print()` to print the HTML version into a PDF!
+
+```r
+pagedown::chrome_print("path-to-file.html")
+```
+
+
