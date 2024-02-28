@@ -76,6 +76,8 @@ Here interesting in knowning how would a outcome of patient change. I are not in
 ## Motivating example
 
 Case study objective: To estimate the causal effect of IPP versus H2RA on the risk of upper gastrointestinal bleeding in patients with atrial fibrillation
+Here https://github.com/jbryer/psa nice plots
+
 
 ::: {.notes}
 The idea is to know if treatment A is more effective than treatment B.
