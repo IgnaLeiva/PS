@@ -5,7 +5,7 @@ dat <- readRDS("final_data.Rds")
 #class
 sapply(dat, class)
 #factor
-factor_vars <- c("ppi", "gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic")
+factor_vars <- c("ppi", "gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic", "pracid")
 # Transform
 dat <- dat %>% 
 mutate_if(names(dat) %in% factor_vars, factor)
@@ -39,6 +39,10 @@ boxplot(PS ~ ppi, data= dat, ylab="Propensity score", xlab="PPI prescription")
 # histo
 ggplot(dat, aes(x=PS, color=factor(ppi),fill = factor(ppi))) +  
   geom_histogram(position="identity",bins = 50, alpha=0.5)+    
+  labs(x = "Propensity score", y="Number of individuals" )
+
+ggplot(dat, aes(x=PS, color=factor(ppi),fill = factor(ppi))) +  
+  geom_density(position="identity",bins = 50, alpha=0.5)+    
   labs(x = "Propensity score", y="Number of individuals" )
 
 
@@ -140,7 +144,7 @@ bal.tab(covs,
 ##             Cox regression                                  ##
 ##              plus PS                                        ##
 #################################################################
-
+library(survival)
 cox.PS <- coxph(Surv(time, as.numeric(died)) ~ as.factor(ppi) + PS, data = dat)
 broom::tidy(cox.PS, exponentiate=TRUE, conf.int=TRUE) 
 
@@ -202,8 +206,8 @@ dat %>%
 dat1 <- dat[, c("ppi", "age","gender","eth5","imd_person","calendarperiod",
                 "prior_gast_cancer","recent_gerd","recent_peptic","bmi", "n_consult","time","died", "ATTwg")
                 ]
-cohort.cox.final2.w <- coxph(Surv(time, died) ~ ppi, weights = ATTwg, data = dat1)
-tidy(cohort.cox.final2.w, exponentiate = TRUE, conf.int = TRUE)  
+cohort.cox.final2.w <- coxph(Surv(time, died) ~ ppi, weights = ATEwg, data = dat1)
+broom::tidy(cohort.cox.final2.w, exponentiate = TRUE, conf.int = TRUE)  
 
 # Assess PH assumption
 bfit1.ph =cox.zph(cohort.cox.final2.w)
@@ -225,12 +229,12 @@ plot.cox.zph
 #-------------------------------
 #. survey package using weight
 #------------------------------- 
-
-ATTwg_design <-svydesign(id=~1, weights=~ATTwg, data=dat)
+library(survey)
+ATEwg_design <-svydesign(id=~1, weights=~ATEwg, data=dat)
 #rpbc<-as.svrepdesign(ATTwg_design)
 
-cox.ATT.rr <- svycoxph(Surv(time, as.numeric(died))~ as.factor(ppi), design=ATTwg_design)
-broom::tidy(cox.ATT.rr, exponentiate=TRUE, conf.int=TRUE)
+cox.ATE.rr <- svycoxph(Surv(time, as.numeric(died))~ as.factor(ppi), design=ATEwg_design)
+broom::tidy(cox.ATE.rr, exponentiate=TRUE, conf.int=TRUE)
 
 # glm.ATT.rr <- svyglm(died ~ ppi, family=quasibinomial(link="log"), design=ATTwg_design)
 # broom::tidy(glm.ATT.rr, exponentiate=TRUE, conf.int=TRUE)
@@ -244,7 +248,7 @@ ggcoxzph(sch.resid.cox.ATT.rr)
 #################################################################
 ##             Regression MAtchinf                         ##
 #################################################################
-
+library(MatchIt)
 nnmatch <- matchit(ppi~PS, data = dat, distance="glm",
                    link="linear.logit", method= "nearest", ratio = 1 , caliper =0.1) 
 summary(nnmatch, standardize=TRUE) 
