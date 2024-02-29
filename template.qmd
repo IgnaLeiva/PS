@@ -157,7 +157,9 @@ Answer the question
 
 [Multi-state modelling]{style="font-size: 1.6em; font-weight: bold;color: white"}
 
+## Popularity of PS
 
+![](images_presentation/popularity)
 
 ## Overall
 
