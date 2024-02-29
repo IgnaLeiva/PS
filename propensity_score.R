@@ -5,14 +5,14 @@ dat <- readRDS("final_data.Rds")
 #class
 sapply(dat, class)
 #factor
-factor_vars <- c("ppi", "gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic", "pracid")
+
 # Transform
-dat <- dat %>% 
-mutate_if(names(dat) %in% factor_vars, factor)
+#dat <- dat %>% 
+#mutate_if(names(dat) %in% factor_vars, factor)
 
 # Model
 #Data with all variables include in the regression plus patid
-dat_regression <- subset(dat, select = -c(patid, indexdate, pracid, deathdate, enddate, died, time))
+#dat_regression <- subset(dat, select = -c(patid, indexdate, pracid, deathdate, enddate, died, time))
 #dat_imp <- readRDS("data_imp.Rds")
 #variables_model <- subset(dat, select = -c(patid))
 
@@ -20,10 +20,20 @@ dat_regression <- subset(dat, select = -c(patid, indexdate, pracid, deathdate, e
 ##             Propensity Score.                               ##
 ##                                                             ##
 #################################################################                          
-                         
-                        
-# Logisct regression
-PS_model <- glm(ppi ~ .,  family=binomial(), data= dat_regression) 
+
+#----------------------                        
+# Logistic regression
+#----------------------
+
+vars <- c("age","gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic", "bmi", "n_consult","pracid")
+formula <- as.formula(paste0("ppi~", paste(vars, collapse = "+")))
+                      
+#----------------------                        
+# Logistic regression
+#----------------------
+
+
+PS_model <- glm(formula,  family=binomial(), data= dat) 
 # Display model coefficients
 #model_out <- broom::tidy(PS_model, exponentiate=TRUE, conf.int=TRUE) 
 
@@ -44,6 +54,58 @@ ggplot(dat, aes(x=PS, color=factor(ppi),fill = factor(ppi))) +
 ggplot(dat, aes(x=PS, color=factor(ppi),fill = factor(ppi))) +  
   geom_density(position="identity",bins = 50, alpha=0.5)+    
   labs(x = "Propensity score", y="Number of individuals" )
+
+
+#----------------------                        
+# Twang package
+#----------------------
+library(twang)
+
+# Data need to be numeric.
+dat_numeric <- dat
+dat_numeric <- dat_numeric |> 
+  mutate(ppi= ifelse(ppi == 0, 0, 1),
+         gender = ifelse(gender == "Female", 0, 1),
+         eth5 = case_when(
+           eth5 == "White" ~ 0,
+           eth5 == "South-Asian" ~ 1,
+           eth5 == "Black" ~ 2,
+           eth5 == "Unknown" ~ 3,
+           eth5 == "Mixed" ~ 4,
+           eth5 == "Other" ~ 5),
+         imd_person = case_when(
+           imd_person == "Least Deprived (1)" ~ 0,
+           imd_person == 2 ~ 1,
+           imd_person == 3 ~ 2,
+           imd_person == 4 ~ 3,
+           imd_person == "Most Deprived (5)" ~ 4),
+         calendarperiod = case_when(
+           calendarperiod == "1991-1999" ~ 0,
+           calendarperiod == "2000-2004" ~ 1,
+           calendarperiod == "2005-2009" ~ 2,
+           calendarperiod == "2010-2014" ~ 3,
+           calendarperiod == "2015-2017"~ 4),
+         prior_gast_cancer = ifelse(prior_gast_cancer == 0, 0, 1),
+         recent_gerd = ifelse(recent_gerd == 0, 0, 1),
+         recent_peptic = ifelse(recent_peptic == 0, 0, 1))
+
+
+ps.gbm = ps(formula,
+              data = as.data.frame(dat),
+              n.trees=5000,
+              
+              interaction.depth=2,
+              shrinkage=0.01,
+              estimand = "ATE",
+              stop.method=c("es.mean","ks.max"),
+              n.minobsinnode = 10,
+              n.keep = 1,
+              n.grid = 25,
+              ks.exact = NULL,
+              verbose=FALSE)
+
+
+dat$ps_m <- ps.gbm$ps$es.mean.ATE
 
 
 #################################################################
