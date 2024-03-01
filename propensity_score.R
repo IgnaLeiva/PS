@@ -25,7 +25,7 @@ sapply(dat, class)
 # Logistic regression
 #----------------------
 
-vars <- c("age","gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic", "bmi", "n_consult","pracid")
+vars <- c("age","gender", "eth5", "imd_person", "calendarperiod", "prior_gast_cancer", "recent_gerd", "recent_peptic", "bmi", "n_consult")
 formula <- as.formula(paste0("ppi~", paste(vars, collapse = "+")))
                       
 #----------------------                        
@@ -91,9 +91,8 @@ dat_numeric <- dat_numeric |>
 
 
 ps.gbm = ps(formula,
-              data = as.data.frame(dat),
+              data = as.data.frame(dat_numeric),
               n.trees=5000,
-              
               interaction.depth=2,
               shrinkage=0.01,
               estimand = "ATE",
@@ -106,8 +105,103 @@ ps.gbm = ps(formula,
 
 
 dat$ps_m <- ps.gbm$ps$es.mean.ATE
+#saveRDS(dat, "datwithps.Rds")
+
+## See weighted population according to twang packege
+library(gt)
+tbl <- bal.table(ps.gbm)
+
+tbl$unw |> gt(rownames_to_stub = T) |> tab_caption(caption = md("Unweighted population"))
+tbl$es.mean.ATE |> gt(rownames_to_stub = T) |> tab_caption(caption = md("Weighted population using Absolute ES"))
 
 
+library(cobalt)
+# from here https://rstudio-pubs-static.s3.amazonaws.com/863559_0b1138f3c34046ff92734f0f5abbec0b.html
+b2 <- bal.tab(ps.gbm, full.stop.method = "es.mean.ate", 
+              stats = c("m", "v"), un = TRUE)
+row.names(b2$Balance) <- c( "ps",
+                            "Age",
+                            "Gender",
+                            "Ethnicity",
+                            "IMD",
+                            "Calendar period",
+                            "Prior gast. cancer",
+                            "Recent GERD",
+                            "Recent p. ulcer",
+                            "BMI",
+                            "N consult.")
+p <- love.plot(b2, 
+               threshold = .1, size = 3,
+               title = "")
+
+ggsave(plot = p, "plot/loveplot.png", width = 6, height = 3)
+
+
+#histogram
+hist(dat$ps_m, xlab="Propensity score", ylab= "Number of individuals" , main="Propensity score distribution", col="darkgrey", breaks=50) 
+
+#boxplot
+boxplot(ps_m ~ ppi, data= dat, ylab="Propensity score", xlab="PPI prescription") 
+
+# histo
+ggplot(dat, aes(x=ps_m, color=factor(ppi),fill = factor(ppi))) +  
+  geom_histogram(position="identity",bins = 50, alpha=0.5)+    
+  labs(x = "Propensity score", y="Number of individuals" )
+
+ggplot(dat, aes(x=ps_m, color=factor(ppi),fill = factor(ppi))) +  
+  geom_density(position="identity",bins = 50, alpha=0.5)+    
+  labs(x = "Propensity score", y="Number of individuals" )
+
+##############################################################
+# Plots to show the diffent use of PS
+##############################################################
+prop.table(table(dat$ppi)) 
+
+# take a sample of 0,01 keeping the proportions. This is for make plots less populated and differentiate point
+# I will use the  ps_m since plot looks nicer
+
+seed(123)
+sampledData <- dat %>% 
+  group_by(ppi) %>%
+  sample_frac(0.01)
+
+
+saveRDS(sampledData, "sampledData.Rds")
+
+
+#:::: Stratification plot :::::
+
+stra_plot <- sampledData |> 
+  mutate(ppi = factor(ifelse(ppi == 1, 'PPI', 'H2RA'), levels = c('PPI', 'H2RA'))) |> 
+  ggplot(aes(x= ppi,y = ps_m, color = ppi, alpha = ps_m))+
+  geom_point(size = 1,position = position_jitter(w = 0.25, h = 0)) +
+  geom_hline(yintercept = c(0.6, .8, 1), color = "grey30", linetype = "dashed") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = 'none') +
+  labs(x = 'Treatment',
+       y= 'Propensity Score')
+
+ggsave(plot = stra_plot, "plot/stra_plot.png", width = 5, height = 3)
+
+#:::: Weighting plot :::::
+
+sampledData$ATEwg <- ifelse(sampledData$ppi== 1, 1/sampledData$ps_m, 1/(1- sampledData$ps_m)) # as IPTW at Charire
+
+wt_plot <- sampledData |> 
+  mutate(ATEwg = ifelse(ppi== 1, 1/ps_m, 1/(1- ps_m)),
+         ppi = factor(ifelse(ppi == 1, 'PPI', 'H2RA'), levels = c('PPI', 'H2RA'))) |> 
+  ggplot(aes(x= ppi,y = ps_m, color = ppi, alpha = ps_m, weight = ATTwg))+
+  geom_point(size = 1,position = position_jitter(w = 0.25, h = 0)) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.position = 'none') +
+  labs(x = 'Treatment',
+       y= 'Propensity Score')
+ggsave(plot = wt_plot, "plot/wt_plot.png", width = 5, height = 3)
+
+summary(dat$PS)
+summary(sampledData$PS)
 #################################################################
 ##             Assessing the covariates                        ##
 ##                     SMD                                    ##

@@ -10,7 +10,7 @@ editor:
 ---
 
 
-## {}
+## {visibility="uncounted"}
 
 
 :::{style="position: absolute; right: 840px; top: 0px; height: 245px; width: 245px; border:0px solid #D9D9D9 ;background-image: url('images/logo.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
@@ -54,6 +54,23 @@ editor:
 
 
 [Causal Effect Estimation]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
+
+
+
+## Level of evidence
+
+![Source: https://openmd.com](images_presentation/levels-of-evidence.svg)
+
+::: {.notes}
+We've been taught that RCT are the study design that can prove causality and observational studies can help us to understand how for example treatments may work in clinical care (effectiveness). And we should use observational studies as hypothesis generated.
+
+But what happens when is not feasible to conduct an RCT because of ethical issues or because the are time consuming. Additionally, we have access to routine data that we could use for answering some question. Then for example, during the pandemic many studies observational studies help clinicians to treat patients, some of them were some of them were baised though.
+
+
+:::
+
+
+
 
 ## Causal Effect Estimation
 
@@ -159,7 +176,57 @@ Answer the question
 
 ## Popularity of PS
 
-![](images_presentation/popularity)
+![](images_presentation/popularity.png)
+
+## Stratification
+
+![](plot/stra_plot2.png)
+
+
+::: {.notes}
+take each strata to estimate treatment effect. Here groups are well balanced. People with similar PS to get the treatment. After getting the ATE at each strata, they are aggregated to get a final ATE
+:::
+
+## Weighting {auto-animate=true}
+
+![](plot/noWeights.png)
+
+## Weighting {auto-animate=true}
+
+![](plot/noWeights.png){.absolute top=180 left=0 width="500" height="350"}
+
+
+![](plot/Weights.png){.absolute top=180 right=0 width="500" height="350"}
+
+
+
+
+
+
+## Matching
+
+![](plot/match.png)
+
+## Adventages and disadventages 
+
+Paper......
+
+## Weighting for the case
+
+See the characteristic of the population 
+
+## Covariate balance
+
+
+![](plot/loveplot.png)
+
+
+
+## Weighting
+
+![](plot/wt_plot.png)
+
+
 
 ## Overall
 
