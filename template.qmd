@@ -44,6 +44,7 @@ editor:
 
 >  **Briefly introduce the concept of casal effect**
 
+proff
 <br>
 
 > **Understand the role of propensity score in pharmacoepidemiology**
