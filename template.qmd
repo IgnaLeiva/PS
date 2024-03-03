@@ -92,15 +92,6 @@ Here interesting in knowning how would a outcome of patient change. I are not in
 :::
 
 
-
-## How to get causal effect estimates
-
-Machine time
-figure
-What would happen if got the treatment 
-
-++ fundamental problem of causal inference
-
 ## How to get causal effect estimates 
 
 
@@ -127,7 +118,26 @@ What would happen if got the treatment
 ![](images_presentation/51.svg){.absolute top=80 left=70}
 
 
+::: {.notes}
+Machine time
+figure
+What would happen if got the treatment 
 
+++ fundamental problem of causal inference
+
+Potential outcome framework
+
+- Two potential outcome for each study paticiapnt:
+
+Outcome after receiving treatment = Y1
+Outcome after receiving comparsion condition = Y0 (can be another treatmen or not treatment control)
+
+- Y1 and Y0 exist for all individual in the population regardsles of whether the individual received treatment (Z=1) or comparison condition (Z = 0)
+- Observe obly on of these outcomes for each participant
+- Then the causal effect will be Y1-Y0 for a given individual
+
+
+:::
 
 
 ## How to get causal effect estimates {auto-animate=true}
@@ -141,25 +151,128 @@ What would happen if got the treatment
 [Fundamental problem of causal inference]{style="position: absolute; font-size: 1em;color: rgb(0, 74, 111); text-align: center; vertical-align:"}
 
 :::
-## Potential outcome framework
 
-- Two potential outcome for each study paticiapnt:
+## Random Assignment
 
-Outcome after receiving treatment = Y1
-Outcome after receiving comparsion condition = Y0 (can be another treatmen or not treatment control)
+![](images_presentation/random1.svg){.absolute top=80 left=70}
 
-- Y1 and Y0 exist for all individual in the population regardsles of whether the individual received treatment (Z=1) or comparison condition (Z = 0)
-- Observe obly on of these outcomes for each participant
-- Then the causal effect will be Y1-Y0 for a given individual
+. . .
+
+![](images_presentation/random2.svg){.absolute top=80 left=70}
+
+
+
+## Random Assignment
+
+![](images_presentation/random2.svg){.absolute top=105 right=800 width=300px}
+
+:::{style="position: absolute; left: 250px; top: 120px; height: 400px; width: 750px; border:1.5px solid #D9D9D9 ;padding: 20px; padding-left: 20px; box-shadow: 0px 0px 0px 0px #6C3483; border-radius: 5px;"}
+
+**Gold standard for estimating causal effects:**
+
+- Randomization (if it works) makes groups being compared balance on baseline characteristics. (observed and unobserved)
+- Treatment assignment is unrelated to potential outcomes (ignorability assumption)
+:::
+
+## Observational studies {auto-animate=true}
+
+- An alternative when randomization is not always feasible
+- Selection bias is a major concern (imbalanced groups)
+
+. . .
+
+![](plot/plot_com.svg){.absolute top=200 left=180}
+
+<br>
+<br>
+<br>
+
+## Observational studies {auto-animate=true}
+
+- An alternative when randomization is not always feasible
+- Selection bias is a major concern (imbalanced groups)
+
+
+![](plot/plot_com.svg){.absolute top=90 left=950 width=200px}
+
+
+. . .
+
+<br>
+
+[Observational studies provide another way to get causal effects:]{style="color: #6C3483"}
+
+- Treatment assignment is not controlled by the researcher
+- Groups being compared are usually imbalanced 
+- Causal inference methods to try to replicate what a randomised study does
+
+
+```{r}
+library(tidyverse)
+
+#plot <-
+#  data.frame(group = c(rep(c("Intervention","Comparator"), 6)),
+#  variable = c(
+#    "Employment", "Employment",
+#    "Insurance", "Insurance", 
+#    "Comorbidities", "Comorbidities", 
+#    "Migrant", "Migrant", 
+#    "Education", "Education",
+#    "Time on Treat.", "Time on Treat."),
+#  value = c(
+#    73, 65,
+#    48, 60,
+#    27, 38,
+#    32, 18,
+#    73, 62,
+#    50, 67))
+
+#plot_com <-ggplot(plot, aes(x = variable, y = value, fill = group)) +
+#  geom_bar(stat = "identity", position = "dodge") +
+#  labs(
+#       x = "",
+#       y = "Percentage",
+#       fill = "Treatment") +
+#  theme_minimal()
+
+#  ggsave(plot = plot_com, "plot/plot_com.svg", width = 8, height = 4)
+
+
+
+```
+
+
+# {background-color="#004a6f"}
+
+[Propensity Score]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
+
+
+## Propensity scores
+
+Propensity scores help us deal with the challenge of selection.
+
+The propensity score is an individual’s probability of receiving the treatment given pretreatment characteristics^[Narita, K., et al. The Leadership Quarterly 2023, 101678.]
+
+$$P(X) = Pr(Z=1 | X)$$
+
+Used to create balance between treatment and comparison conditons. Balancing on $P(X)$ can balance distribution of $X$ between treatment and comparison group.
+
+::: {.notes}
+Omiting the strong ignorability assumption, the propensity score is the probability of receiving the treatment given the observed covariates.
+:::
+
+## Popularity of PS
+
+![](images_presentation/popularity.png)
+
 
 ## Motivating example
 
-- Proton pump inhibitors (PPI) use is linked to a higher risk of all-cause mortality, bone fractures, impaired absorption of micronutrients, dementia, liver disease, and increased risk of cirrhosis-related complications^[Brown JP, et al. Br J Clin Pharmacol 2021; 87: 3150–3161]
+- Single-tablet regimens (STR) are associated with higher adherence rates, decreased hospitalizations, and a higher proportion of patients achieving undetectable viral loads compared to multi-tablet regimens (MTR)^[Sutton SS, et al. Am J Manag Care. 2016;22(4):242-8]
 
-- PPI users experienced a 25% heightened risk of death from all causes compared to those taking H2 blockers^[Cholin L, et al. BMC Nephrol 2021, 22:264]
+- STRs can lead to improved therapy satisfaction, better symptom control, enhanced health status, reduced healthcare resource utilization, and cost-effectiveness compared to MTRs^[Clay PG, et al. AIDS Res Ther 2018; 15:17]
 
-- PPI use has been associated with an increased risk of 
-mortality in cancer patients, liver cirrhotics, and those requiring artificial nutrition^[Fossmark R, et al. Int J Mol Sci. 2019, 21;20(20):5203]
+
 
 ::: {.notes}
 The idea is to know if treatment A is more effective than treatment B.
@@ -172,9 +285,9 @@ Then not bear in mind that the analysis of longitunal data benefit from these an
 
 ## Motivating example
 
-:::{style="position: absolute; left: 100px; top: 90px; height: 150px; width: 800px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 55px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
+:::{style="position: absolute; left: 100px; top: 90px; height: 150px; width: 800px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
 
-Using a simulated data set, we will estimate the effect of PPI on all-cases mortality compared to (Histamine Type-2 Receptor Antagonists)H2RA
+[The aim is to investigate whether a single-tablet regimens (STR) affects adherence and HIV viral supression, in comparison with multi-tablet regimens (MTR).]{style="font-size: 30px"}
 
 :::
 
@@ -183,7 +296,9 @@ Using a simulated data set, we will estimate the effect of PPI on all-cases mort
 ![](images_presentation/52.svg){.absolute top=250 left=180 width=680px}
 
 
-## Primary types of causal effect
+::: {.notes}
+
+Primary types of causal effect
 
 - ATE
 
@@ -201,32 +316,21 @@ Answer the question
 - How effective is a particular treatment for a particular population (the target group)
 - How would those who received treatment have done had they received the comparison condition? ***
 - E(Y1 - Y0 | Z =1)
-
+::: 
   
-# {background-color="#004a6f"}
+## Application of PS
 
+PS can be used in different ways to estimate the treatment effect^[Thoemmes, FJ. et al. Multivariate Behavioral Research 2011, 46(1), 90-118.]
 
-
-
-[Propensity Score]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
-
-
-
-
-## Popularity of PS
-
-![](images_presentation/popularity.png)
-
-## What is the propensity score?
-
-
-## Use of PS
-
-## Type of PS
+- Stratification
+- Matching
+- Weighting
+- Regression adjustment
+  
 
 ## Stratification
 
-![](plot/stra_plot2.png)
+![](plot/stra_plot2.svg)
 
 
 ::: {.notes}
@@ -235,43 +339,188 @@ take each strata to estimate treatment effect. Here groups are well balanced. Pe
 
 ## Matching
 
-![](plot/match.png)
+![](plot/match.svg){.absolute left=250}
 
 ## Weighting {auto-animate=true}
 
-![](plot/noWeights.png)
+![](plot/noWeights.svg)
 
 ## Weighting {auto-animate=true}
 
-![](plot/noWeights.png){.absolute top=180 left=0 width="500" height="350"}
+![](plot/noWeights.svg){.absolute top=160 left=0 width="400" height="350"}
 
 
-![](plot/Weights.png){.absolute top=180 right=0 width="500" height="350"}
-
-
-
+![](plot/Weights.svg){.absolute top=160 left=380 width="800" height="400"}
 
 ## Adventages and disadventages 
 
-Paper......
 
-## Weighting for the case
+## The HIV example
 
-See the characteristic of the population 
-
-## Covariate balance
+:::{style="position: absolute; right: 500px; top: 90px; height: 550px; width: 560px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
 
 
-![](plot/loveplot.png)
+- 803 patients
+- Outcome: Adherence and viral suppression
+- Exposure: Single-tablet regimens (STR) vs multi-tablet regimens (MTR)
+- Covariates: 16 - Sociodemographic, clinical, and treatment-related variables
 
+::: 
+
+
+![](plot/plot_hiv.svg){.absolute top=70 height="600" left=580}
+```{r}
+library(tidyverse)
+
+plotvhi <-
+  data.frame(group = c(rep(c("STR","MTR"), 6)),
+    variable = c(
+    "Employment", "Employment",
+    "Insurance", "Insurance", 
+    "Comorbidities", "Comorbidities", 
+    "Migrant", "Migrant", 
+    "Education", "Education",
+    "Time on Treat.", "Time on Treat."),
+  value = c(
+    73, 65,
+    48, 60,
+    27, 38,
+    32, 18,
+    73, 62,
+    50, 67))
+
+plot_hiv <-ggplot(plotvhi, aes(x = value , y = variable, fill = group)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.7) +
+  scale_fill_manual(values =c("#404080", "#69b3a2")) +
+  labs(
+      x = "Percentage",
+      y = "",
+      fill = "Treatment") +
+  theme_minimal()
+
+ #ggsave(plot = plot_hiv, "plot/plot_hiv.svg", width = 6, height = 7)
+
+
+
+```
+
+## Variable selection for PS
+
+Variable selection based on subject matter knowledge and considering 
+ the following criteria:^[Brookhart MA, et al. Am J Epidemiol. 2006 Jun 15;163(12):1149-56] 
+
+- Related to the treatment and the outcome (confounders)
+- Variables only related to the outcome
+
+::: {.notes}
+Rubin suggests that including variables that are strongly related to exposure, but unrelated to the outcome, can decrease the efficiency of an estimated exposure effect; but he argues that if such a variable had even a weak effect on the outcome, the bias resulting from its exclusion would dominate any loss of efficiency for a reasonably sized study 
+:::
+
+Some variables included were: age, sex, time on treatment, employment, insurance, comorbidities, migrant, education, and others.
+
+## Propensity score assessment
+
+```{r}
+library("cobalt")
+b2 <- readRDS("dta_love_plot.rds")
+
+v1 <- var.names(b2, type = "vec", minimal = TRUE)
+v1["sex"] <- "Male"
+v1["age"] <- "Age in years"
+v1["insurance"] <- "Health Insurance classification"
+v1["comorbidities"] <- "Additional long-term conditions"
+v1["migrant"] <- "Migrant background"
+v1["education.level "] <- "Educational level"
+v1["timeOnART"] <- "\u2265 1-year on ART"
+v1["housing"] <- "Living in owned or rented housing"
+v1["self.stigma"] <- "At least one question related to self-stigma "
+v1["addiction"] <- "At least one question related to addiction (alcohol/drugs)"
+v1["mental.health"] <- "At least one question related to mental health "
+v1["adherent"] <- "PDC \u2265 95%"
+v1["comuna"] <- "Living in the same municipality as the health centre"
+v1["STR"] <- "Single Tablet Regimen"
+p <- love.plot(b2, 
+               threshold = .1, size = 3, 
+               var.names = v1,
+               title ="" #"Standardised mean differences of adjusted and\nunadjusted cohorts"
+               )
+p
+```
+
+## Propensity score assessment
+
+```{r}
+library("tidyverse")
+set.seed(123)
+d <-data.frame(n=rbeta(584,6,2), Treatment = "STR")
+e <-data.frame(n=rbeta(219,5,1.8), Treatment = "MTR")
+
+dat <- rbind(d,e)
+
+dat %>% 
+  ggplot(aes(x = n, fill = Treatment))+
+  geom_density(alpha = 0.3) +
+  scale_fill_manual(values =c("#404080", "#69b3a2")) +
+  theme_bw() +
+  theme(legend.key = element_blank()) + 
+  labs(x = "Propensity Score",
+       fill = "Treatment")
+```
 
 
 ## Different PS approaches
 
-Insert forstplot
+```{r}
+library("cobalt")
+b2 <- readRDS("dta_love_plot.rds")
 
-```r
-pagedown::chrome_print("path-to-file.html")
+v1 <- var.names(b2, type = "vec", minimal = TRUE)
+v1["sex"] <- "Male"
+v1["age"] <- "Age in years"
+v1["insurance"] <- "Health Insurance classification"
+v1["comorbidities"] <- "Additional long-term conditions"
+v1["migrant"] <- "Migrant background"
+v1["education.level "] <- "Educational level"
+v1["timeOnART"] <- "\u2265 1-year on ART"
+v1["housing"] <- "Living in owned or rented housing"
+v1["self.stigma"] <- "At least one question related to self-stigma "
+v1["addiction"] <- "At least one question related to addiction (alcohol/drugs)"
+v1["mental.health"] <- "At least one question related to mental health "
+v1["adherent"] <- "PDC \u2265 95%"
+v1["comuna"] <- "Living in the same municipality as the health centre"
+v1["STR"] <- "Single Tablet Regimen"
+p <- love.plot(b2, 
+               threshold = .1, size = 3, 
+               var.names = v1,
+               title ="" #"Standardised mean differences of adjusted and\nunadjusted cohorts"
+               )
+p
 ```
 
 
+## Average treatment effect
+
+for being virally non-suppressed
+
+wiggted                0.607     0.292     -1.71 8.75e- 2   0.342      0.89
+unad    STR            0.540     0.248     -2.49 1.29e- 2   0.331      0.77
+match           STR     0.784     0.496    -0.492 6.23e- 1   0.35      1.67 
+
+for being adherent 
+weight STR             1.20     0.231     0.548 5.84e- 1    1.10      1.79
+unadjusted STR         1.81     0.196      3.03 2.44e- 3     1.44      2.66
+matched STR            1.30     0.196      3.03 2.44e- 3     1.20      1.95
+
+
+
+## Potential limitations
+We only included variables that were available in the dataset. (un measured confounders)
+We are assumining that variables are measured without error.
+
+however, comparing with other methods for analysing observational data, PS offers to get closer to causal inference.
+
+## Conclusion
+
+Propensity scores cannot replace randomization but are a good alternative for analyzing non-randomized treatment studies and have epistemiological advantages over conventional regression modelling. PS matching, in particular, has a number of advantages. The most important of these is the ability to compare risk factors in the two treatment groups explicitly.
+
+One thing, however, must always be remembered: like conventional regression models, propensity scores can only adjust for patient characteristics that are known and have actually been measured. Only randomized controlled trials can achieve equal distributions of unknown confounding factors too.
