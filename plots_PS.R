@@ -3,7 +3,7 @@ library(ggridges)
 # data from the propensity_score.R file
 sampledData <- readRDS('sampledData.Rds')
 sampledData<- sampledData %>% 
-  mutate(Treatment = factor(ifelse(ppi == 1, 'PPI', 'H2RA'), levels = c('PPI', 'H2RA'))) 
+  mutate(Treatment = factor(ifelse(ppi == 1, 'Intervention', 'Comparator'), levels = c('Intervention', 'Comparator'))) 
 
 ##########################################
 #                                        #
@@ -48,13 +48,13 @@ sampledData <- sampledData |>
 plot_strata<-sampledData |> 
   ggplot(aes(x = ps_m, y = strata_ps, fill = Treatment)) +
   geom_density_ridges(alpha = 0.4) +
-  # scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07")) +
+  scale_fill_manual(values =c("#404080", "#69b3a2")) +
   theme_bw() +
   #guides(fill = guide_legend(title = "Treatment"), alpha = FALSE) +
   labs(x = " Propensity score value",
        y = "Propensity Score strata")
 
-ggsave(plot = plot_strata, "plot/stra_plot2.png", width = 5, height = 3)
+ggsave(plot = plot_strata, "plot/stra_plot2.svg", width = 8, height = 4)
 
 
 ##########################################
@@ -72,21 +72,25 @@ sampledData$ATEwg <- ifelse(sampledData$ppi== 1, 1/sampledData$ps_m, 1/(1- sampl
 noWeights <- sampledData |> 
   ggplot(aes(x = ps_m, fill = Treatment)) +
   geom_density(alpha = 0.4) +
+   scale_fill_manual(values =c("#404080", "#69b3a2")) +
   theme_bw() +
-  labs(x = "Propensity score value",
+  labs(title= "Pre-weighting",
+      x = "Propensity score value",
        y = "Propensity Score strata")
-ggsave(plot = noWeights, "plot/noWeights.png", width = 5, height = 3)  
+ggsave(plot = noWeights, "plot/noWeights.svg", width = 5, height = 3)  
 
 ## Weight
 Weights <-sampledData |> 
-  mutate(Treatment = factor(ifelse(ppi == 1, 'PPI', 'H2RA'), levels = c('PPI', 'H2RA'))) |> 
+  mutate(Treatment = factor(ifelse(ppi == 1, 'Intervention', 'Comparator'), levels = c('Intervention', 'Comparator'))) |> 
   ggplot(aes(x = ps_m, fill = Treatment, weight = ATEwg)) +
   geom_density(alpha = 0.4) +
+   scale_fill_manual(values =c("#404080", "#69b3a2")) +
   theme_bw() +
-  labs(x = "Propensity score value",
+  labs(title= "Post-weighting",
+  x = "Propensity score value",
        y = "Propensity Score strata")
 
-ggsave(plot = Weights, "plot/Weights.png", width = 5, height = 3)
+ggsave(plot = Weights, "plot/Weights.svg", width = 5, height = 3)
 
 #----------------------------------------
 #       Scatterplot plot by strata
@@ -99,7 +103,8 @@ wt_plot <- sampledData |>
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.position = 'none') +
-  labs(y= 'Propensity Score')
+  labs(title= "Post-weighting",
+  y= 'Propensity Score')
 ggsave(plot = wt_plot, "plot/wt_plot.png", width = 5, height = 3)
 
 
@@ -138,10 +143,11 @@ df_pairs <- df_pairs[c('Treatment', 'ps_m', 'pair')]
 match <- df_pairs |>  
   slice(1:60) |> 
   ggplot(aes(x= Treatment,y = ps_m, color = Treatment))+
-  geom_point(shape = 1,size = 2) +
+  geom_point(shape = 16,size = 2) +
+  scale_color_manual(values =c("#404080", "#69b3a2")) +
   #geom_point(size = 1,position = position_jitter(w = 0.25, h = 0)) +
   geom_line(aes(group = pair), color= 'grey45',linetype = "dashed") +
   theme_bw() +
   theme(legend.position = 'none')+
   labs(y = "Propensity Score strata")
-ggsave(plot = match, "plot/match.png", width = 5, height = 3)
+ggsave(plot = match, "plot/match.svg", width = 6, height = 6)
