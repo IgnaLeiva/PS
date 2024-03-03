@@ -69,7 +69,7 @@ ggplot() + geom_point(aes(x = as.numeric(smd), y = covariates, color = category)
   theme_ipsum() +
    theme(legend.position = c(0.9, 0.9))
 
-ggsave(plot = plot_A, "plot/plot_A.png", width = 4, height = 4)
+ggsave(plot = plot_A, "plot/plot_A.svg", width = 4, height = 4)
 
 
 ##################################
@@ -96,7 +96,7 @@ plot_B <- currentDataset %>%
          legend.title = element_text(size = 10)) +
   labs(fill = "Smoking\nStatus")
 
-ggsave(plot = plot_B, "plot/plot_B.png", width = 4, height = 4)
+ggsave(plot = plot_B, "plot/plot_B.svg", width = 4, height = 4)
 
 ##################################
 #.        Boxplot              #
@@ -118,7 +118,7 @@ ggplot(aes(x = Smoker, y = ps, fill = Smoker)) +
       aspect.ratio = 18/22
     )
 
-    ggsave(plot = plot_c, "plot/plot_C.png", width = 4, height = 4)
+    ggsave(plot = plot_c, "plot/plot_C.svg", width = 4, height = 4)
 
 
 pagedown::chrome_print("template.html")
