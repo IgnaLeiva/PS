@@ -195,7 +195,7 @@ Randomised controlled trials: Random assignment
 
 **Gold standard for estimating causal effects:**
 
-- Randomization (if it works) makes groups being compared balance on baseline characteristics. (observed and unobserved)
+- Randomisation (if it works) makes groups being compared balance on baseline characteristics. (observed and unobserved)
 - Treatment assignment is unrelated to potential outcomes (ignorability assumption)
 :::
 
@@ -214,7 +214,7 @@ Randomised controlled trials: Random assignment
 
 ## Observational studies {auto-animate=true}
 
-- An alternative when randomization is not always feasible
+- An alternative when randomisation is not always feasible
 - Selection bias is a major concern (imbalanced groups)
 
 
@@ -286,7 +286,6 @@ Propensity scores help us deal with the challenge of selection.
 
 $$e_{i} = Pr(Z_{i}=1 | X_{i})$$
 
-- Used to create balance between treatment and comparison conditons. 
 - Conditional on $e_{i}$, the distribution of $X$ (measured covariates) is similar between treated and untreated (comparison) individuals.
 
 ::: {.notes}
@@ -295,14 +294,14 @@ Omiting the strong ignorability assumption, the propensity score is the probabil
 
 
 
-## PS comes with assumption
+## PS comes with assumptions
 
 Strongly ignorable assumption, two conditions^[Austin PC. et al. Multivariate Behav Res. 2011 May;46(3):399-424]
 
 1. No unmeasured confounders: All variables affecting treatment assignment and outcome have been measured
 2. Everyone has a nonzero probability to receive the treatment
 
-## PS comes with assumption
+## PS comes with assumptions
 
 - First assumption is not testable (using the data)
 - Second assumption can be indirectly assessed by PS:
@@ -556,7 +555,7 @@ dat %>%
 
 ```{r}
 
-RR_data  <- data.frame(Condition = c(rep("virally non-suppressed", 3), rep("Adherent",3)),
+RR_data  <- data.frame(Condition = c(rep("Virally non-suppressed: STR vs MTR", 3), rep("Adherent: STR vs MTR",3)),
                       RiskRatio = c(0.54, 0.78, 0.60, 1.81, 1.30, 1.20),
                       LowerLimit = c(0.33, 0.35, 0.34, 1.44, 1.20, 1.10),
                       UpperLimit = c(0.77, 0.94, 0.89, 2.32, 1.95, 1.79),
@@ -580,8 +579,9 @@ g = ggplot(data=RR_data,
     theme(plot.title=element_text(size=16,face="bold"),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
-        axis.text.x=element_text(face="bold"),
-        axis.title=element_text(size=12,face="bold"),
+        #axis.text.x=element_text(face="bold"),
+        axis.title.x=element_text(size=12,face="bold"),
+        axis.title.y=element_blank(),
         strip.text.y = element_text(hjust=0.5,vjust = 1,angle=180,face="bold"))+
     coord_flip() +
   scale_y_continuous(breaks=vec)+
