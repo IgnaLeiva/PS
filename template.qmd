@@ -10,15 +10,14 @@ editor:
 ---
 
 
+## {visibility="uncounted"}
+
+
 <!--  This is a way to add a logo to the presentation, it is not the best way to do it, but it works.  
 :::{style="position: absolute; left: 295px; top: 0px; height: 245px; width: 245px; border:1px solid #D9D9D9 ;background-image: url('plot/plot_B.png'); background-size: cover; background-repeat: no-repeat; padding: 0px; padding-left: 0px; box-shadow: 0px 0px 0px 0px #85929e; border-radius: 5px;"}
 :::
 
 -->
-
-
-
-## {visibility="uncounted"}
 
 
 <!-- This is the HKHD-->
@@ -59,7 +58,7 @@ editor:
 
 <br>
 
->  **Briefly introduce the concept of casal effect**
+>  **Briefly introduce the concept of causal effect**
 
 
 <br>
@@ -68,12 +67,19 @@ editor:
 
 # {background-color="#004a6f"}
 
-
-
-## Corralation vs causation
-
-
 [Causal Effect Estimation]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
+
+
+
+## Correlation vs causation
+
+- In clinical research, it is crucial to remember that correlation is not equivalent to causation.
+- Association between two variables does not necessarily imply a cause-and-effect relationship.
+- Women taking hormone replacement therapy (HRT) where link to a lower risk of coronary heart disease:
+  - Women taking HRT tend to have a higher socioeconomic status and healthier lifestyle habits
+
+
+
 
 
 <!-- This is slide maybe is not the best for this presentation
@@ -87,9 +93,7 @@ We've been taught that RCT are the study design that can prove causality and obs
 But what happens when is not feasible to conduct an RCT because of ethical issues or because the are time consuming. Additionally, we have access to routine data that we could use for answering some question. Then for example, during the pandemic many studies observational studies help clinicians to treat patients, some of them were some of them were baised though.
 
 
-:::
-
--->
+:::   -->
 
 
 ## Causal Effect Estimation
@@ -171,13 +175,15 @@ Outcome after receiving comparsion condition = Y0 (can be another treatmen or no
 
 :::
 
-## Random Assignment
+## A way to get around  
 
-![](images_presentation/random1.svg){.absolute top=80 left=70}
+Randomised controlled trials: Random assignment
+
+![](images_presentation/random1.svg){.absolute top=110 left=70}
 
 . . .
 
-![](images_presentation/random2.svg){.absolute top=80 left=70}
+![](images_presentation/random2.svg){.absolute top=110 left=70}
 
 
 
@@ -214,8 +220,10 @@ Outcome after receiving comparsion condition = Y0 (can be another treatmen or no
 
 ![](plot/plot_com.svg){.absolute top=90 left=950 width=200px}
 
-
+<!--
 . . .
+
+-->
 
 <br>
 
@@ -265,6 +273,10 @@ library(tidyverse)
 
 [Propensity Score]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
 
+## Popularity of PS
+
+![](images_presentation/popularity.png)
+
 
 ## Propensity scores
 
@@ -272,48 +284,34 @@ Propensity scores help us deal with the challenge of selection.
 
 - The propensity score is an individual’s probability of receiving the treatment given pretreatment characteristics^[Narita, K., et al. The Leadership Quarterly 2023, 101678.]
 
-$$P(X) = Pr(Z=1 | X)$$
+$$e_{i} = Pr(Z_{i}=1 | X_{i})$$
 
 - Used to create balance between treatment and comparison conditons. 
-- Balancing on $P(X)$ can balance distribution of $X$ between treatment and comparison group.
+- Conditional on $e_{i}$, the distribution of $X$ (measured covariates) is similar between treated and untreated (comparison) individuals.
 
 ::: {.notes}
 Omiting the strong ignorability assumption, the propensity score is the probability of receiving the treatment given the observed covariates.
 :::
 
-## Popularity of PS
-
-![](images_presentation/popularity.png)
 
 
-## Motivating example
+## PS comes with assumption
 
-- Single-tablet regimens (STR) are associated with higher adherence rates, decreased hospitalizations, and a higher proportion of patients achieving undetectable viral loads compared to multi-tablet regimens (MTR)^[Sutton SS, et al. Am J Manag Care. 2016;22(4):242-8]
+Strongly ignorable assumption, two conditions^[Austin PC. et al. Multivariate Behav Res. 2011 May;46(3):399-424]
 
-- STRs can lead to improved therapy satisfaction, better symptom control, enhanced health status, reduced healthcare resource utilization, and cost-effectiveness compared to MTRs^[Clay PG, et al. AIDS Res Ther 2018; 15:17]
+1. No unmeasured confounders: All variables affecting treatment assignment and outcome have been measured
+2. Everyone has a nonzero probability to receive the treatment
+
+## PS comes with assumption
+
+- First assumption is not testable (using the data)
+- Second assumption can be indirectly assessed by PS:
+
+. . . 
+
+![](plot/noWeights_notitle.svg){.absolute top=250 left=180 width=680px}
 
 
-
-::: {.notes}
-The idea is to know if treatment A is more effective than treatment B.
-We have to acknowledge people who is receiving treatment A is different from people who is receiving treatment B. And we need to deal with that in order to estimate the causal effect of the treatment.
-
-Then not bear in mind that the analysis of longitunal data benefit from these analysis
-
-:::
-
-
-## Motivating example
-
-:::{style="position: absolute; left: 100px; top: 90px; height: 150px; width: 800px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
-
-[The aim is to investigate whether a single-tablet regimens (STR) affects adherence and HIV viral supression, in comparison with multi-tablet regimens (MTR).]{style="font-size: 30px"}
-
-:::
-
-. . .
-
-![](images_presentation/52.svg){.absolute top=250 left=180 width=680px}
 
 
 ::: {.notes}
@@ -338,6 +336,8 @@ Answer the question
 - E(Y1 - Y0 | Z =1)
 ::: 
   
+
+  
 ## Application of PS
 
 PS can be used in different ways to estimate the treatment effect^[Thoemmes, FJ. et al. Multivariate Behavioral Research 2011, 46(1), 90-118.]
@@ -359,6 +359,20 @@ take each strata to estimate treatment effect. Here groups are well balanced. Pe
 
 ## Matching
 
+<!--
+
+:::{style="position: absolute; right: 500px; top: 90px; height: 550px; width: 560px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
+
+
+- Matching people with similar PS
+- Enable to get ATT
+- Match 1:n
+- Covariates: 16 - Sociodemographic, clinical, and treatment-related variables
+
+::: 
+
+-->
+
 ![](plot/match.svg){.absolute left=250}
 
 ## Weighting {auto-animate=true}
@@ -372,10 +386,44 @@ take each strata to estimate treatment effect. Here groups are well balanced. Pe
 
 ![](plot/Weights.svg){.absolute top=160 left=380 width="800" height="400"}
 
-## Adventages and disadventages 
+# {background-color="#004a6f"}
+
+[PS application: HIV treatment]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
 
 
-## The HIV example
+## HIV treatment
+
+- Single-tablet regimens (STR) are associated with higher adherence rates, decreased hospitalizations, and a higher proportion of patients achieving undetectable viral loads compared to multi-tablet regimens (MTR)^[Sutton SS, et al. Am J Manag Care. 2016;22(4):242-8]
+
+- STRs can lead to improved therapy satisfaction, better symptom control, enhanced health status, reduced healthcare resource utilization, and cost-effectiveness compared to MTRs^[Clay PG, et al. AIDS Res Ther 2018; 15:17]
+
+
+
+::: {.notes}
+The idea is to know if treatment A is more effective than treatment B.
+We have to acknowledge people who is receiving treatment A is different from people who is receiving treatment B. And we need to deal with that in order to estimate the causal effect of the treatment.
+
+Then not bear in mind that the analysis of longitunal data benefit from these analysis
+
+:::
+
+
+
+
+## HIV treatment
+
+:::{style="position: absolute; left: 100px; top: 90px; height: 150px; width: 800px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
+
+[The aim is to investigate whether a single-tablet regimens (STR) affects adherence and HIV viral supression, in comparison with multi-tablet regimens (MTR).]{style="font-size: 30px"}
+
+:::
+
+. . .
+
+![](images_presentation/52.svg){.absolute top=250 left=180 width=680px}
+
+
+## The cohort
 
 :::{style="position: absolute; right: 500px; top: 90px; height: 550px; width: 560px; border:1.5px solid rgb(0, 74, 111) ;padding: 5px; padding-left: 30px; box-shadow: 0px 0px 5px 0px #6C3483; border-radius: 5px;"}
 
@@ -440,31 +488,43 @@ Some variables included were: age, sex, time on treatment, employment, insurance
 
 ## Propensity score assessment
 
-```{r}
-library("cobalt")
-b2 <- readRDS("dta_love_plot.rds")
+![](plot/love_plot.svg)
 
-v1 <- var.names(b2, type = "vec", minimal = TRUE)
-v1["sex"] <- "Male"
-v1["age"] <- "Age in years"
-v1["insurance"] <- "Health Insurance classification"
-v1["comorbidities"] <- "Additional long-term conditions"
-v1["migrant"] <- "Migrant background"
-v1["education.level "] <- "Educational level"
-v1["timeOnART"] <- "\u2265 1-year on ART"
-v1["housing"] <- "Living in owned or rented housing"
-v1["self.stigma"] <- "At least one question related to self-stigma "
-v1["addiction"] <- "At least one question related to addiction (alcohol/drugs)"
-v1["mental.health"] <- "At least one question related to mental health "
-v1["adherent"] <- "PDC \u2265 95%"
-v1["comuna"] <- "Living in the same municipality as the health centre"
-v1["STR"] <- "Single Tablet Regimen"
-p <- love.plot(b2, 
-               threshold = .1, size = 3, 
-               var.names = v1,
-               title ="" #"Standardised mean differences of adjusted and\nunadjusted cohorts"
-               )
-p
+
+::: {.notes}
+
+ standardized difference provides a framework for comparing the mean or prevalence of a baseline covariate between treatment
+ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3144483/#s11title
+ 
+::: 
+
+```{r}
+# library("cobalt")
+# b2 <- base::readRDS("dta_love_plot.Rds")
+# 
+# v1 <- var.names(b2, type = "vec", minimal = TRUE)
+# v1["sex"] <- "Male"
+# v1["age"] <- "Age in years"
+# v1["insurance"] <- "Health Insurance classification"
+# v1["comorbidities"] <- "Additional long-term conditions"
+# v1["migrant"] <- "Migrant background"
+# v1["education.level "] <- "Educational level"
+# v1["timeOnART"] <- "\u2265 1-year on ART"
+# v1["housing"] <- "Living in owned or rented housing"
+# v1["self.stigma"] <- "At least one question related to self-stigma "
+# v1["addiction"] <- "At least one question related to addiction (alcohol/drugs)"
+# v1["mental.health"] <- "At least one question related to mental health "
+# v1["adherent"] <- "PDC \u2265 95%"
+# v1["comuna"] <- "Living in the same municipality as the health centre"
+# v1["STR"] <- "Single Tablet Regimen"
+# p <- love.plot(b2, 
+#                threshold = .1, size = 3, 
+#                var.names = v1,
+#                title ="" #"Standardised mean differences of adjusted and\nunadjusted cohorts"
+#                )
+
+
+#ggsave(plot = p, "plot/love_plot.svg", width = 10, height = 6)
 ```
 
 ## Propensity score assessment
@@ -488,59 +548,89 @@ dat %>%
 ```
 
 
-## Different PS approaches
 
-```{r}
-library("cobalt")
-b2 <- readRDS("dta_love_plot.rds")
-
-v1 <- var.names(b2, type = "vec", minimal = TRUE)
-v1["sex"] <- "Male"
-v1["age"] <- "Age in years"
-v1["insurance"] <- "Health Insurance classification"
-v1["comorbidities"] <- "Additional long-term conditions"
-v1["migrant"] <- "Migrant background"
-v1["education.level "] <- "Educational level"
-v1["timeOnART"] <- "\u2265 1-year on ART"
-v1["housing"] <- "Living in owned or rented housing"
-v1["self.stigma"] <- "At least one question related to self-stigma "
-v1["addiction"] <- "At least one question related to addiction (alcohol/drugs)"
-v1["mental.health"] <- "At least one question related to mental health "
-v1["adherent"] <- "PDC \u2265 95%"
-v1["comuna"] <- "Living in the same municipality as the health centre"
-v1["STR"] <- "Single Tablet Regimen"
-p <- love.plot(b2, 
-               threshold = .1, size = 3, 
-               var.names = v1,
-               title ="" #"Standardised mean differences of adjusted and\nunadjusted cohorts"
-               )
-p
-```
 
 
 ## Average treatment effect
 
+
+```{r}
+
+RR_data  <- data.frame(Condition = c(rep("virally non-suppressed", 3), rep("Adherent",3)),
+                      RiskRatio = c(0.54, 0.78, 0.60, 1.81, 1.30, 1.20),
+                      LowerLimit = c(0.33, 0.35, 0.34, 1.44, 1.20, 1.10),
+                      UpperLimit = c(0.77, 0.94, 0.89, 2.32, 1.95, 1.79),
+                      Group = factor(rep(c("Unadjusted", "Matching", "Weighting"),2), levels = c("Matching", "Weighting","Unadjusted")))
+
+
+
+vec <-sort(c(RR_data$RiskRatio, RR_data$LowerLimit, RR_data$UpperLimit))
+vec <-c(0.33, 0.60, 0.78, 0.94, 1.20, 1.20, 1.30, 1.81, 1.95, 2.32)
+
+g = ggplot(data=RR_data,
+    aes(x = Group,y = RiskRatio, ymin = LowerLimit, ymax = UpperLimit ))+
+    geom_pointrange(aes(col=Group))+
+    geom_hline(aes(fill=Group),yintercept =1, linetype=2)+
+  labs(x ='Group',
+       y= "Risk Ratio (95% Confidence Interval)",
+       color = 'Method')+
+    geom_errorbar(aes(ymin=LowerLimit, ymax=UpperLimit,col=Group),width=0.5,cex=1)+ 
+    facet_wrap(~Condition,strip.position="left",nrow=9,scales = "free_y") +
+  theme_bw()+
+    theme(plot.title=element_text(size=16,face="bold"),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.x=element_text(face="bold"),
+        axis.title=element_text(size=12,face="bold"),
+        strip.text.y = element_text(hjust=0.5,vjust = 1,angle=180,face="bold"))+
+    coord_flip() +
+  scale_y_continuous(breaks=vec)+
+  guides(col = guide_legend(reverse = TRUE))
+ g
+ 
+ 
+ 
+
+```
+
+<!--
 for being virally non-suppressed
 
-wiggted                0.607     0.292     -1.71 8.75e- 2   0.342      0.89
+
 unad    STR            0.540     0.248     -2.49 1.29e- 2   0.331      0.77
 match           STR     0.784     0.496    -0.492 6.23e- 1   0.35      1.67 
+wiggted                0.607     0.292     -1.71 8.75e- 2   0.342      0.89
+
+
 
 for being adherent 
-weight STR             1.20     0.231     0.548 5.84e- 1    1.10      1.79
+
 unadjusted STR         1.81     0.196      3.03 2.44e- 3     1.44      2.66
 matched STR            1.30     0.196      3.03 2.44e- 3     1.20      1.95
-
-
+weight STR             1.20     0.231     0.548 5.84e- 1    1.10      1.79
+-->
 
 ## Potential limitations
-We only included variables that were available in the dataset. (un measured confounders)
-We are assumining that variables are measured without error.
 
-however, comparing with other methods for analysing observational data, PS offers to get closer to causal inference.
+- The reliability of study results of observational studies will depend on the quality of the data.
+- Evaluation of potential biases (selection, information bias, and confounding).
+- PS only helps to address measured confounders.
+- PS offers to get closer causal effect compared to traditional observational methods
 
-## Conclusion
 
-Propensity scores cannot replace randomization but are a good alternative for analyzing non-randomized treatment studies and have epistemiological advantages over conventional regression modelling. PS matching, in particular, has a number of advantages. The most important of these is the ability to compare risk factors in the two treatment groups explicitly.
+# {background-color="#004a6f"}
+
+[Thank you for listening]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
+
+
+
+
+<!--
+## Final remarks
+
+- Propensity scores cannot replace randomization but are a good alternative for analyzing non-randomized treatment studies.
+and have epistemiological advantages over conventional regression modelling. PS matching, in particular, has a number of advantages. The most important of these is the ability to compare risk factors in the two treatment groups explicitly.
 
 One thing, however, must always be remembered: like conventional regression models, propensity scores can only adjust for patient characteristics that are known and have actually been measured. Only randomized controlled trials can achieve equal distributions of unknown confounding factors too.
+
+-->
