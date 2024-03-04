@@ -70,11 +70,13 @@ editor:
 
 
 
+## Corralation vs causation
+
 
 [Causal Effect Estimation]{style="position: absolute; left: 0px; top: 500px; font-size: 1.5em; font-weight: bold;color: white"}
 
 
-
+<!-- This is slide maybe is not the best for this presentation
 ## Level of evidence
 
 ![Source: https://openmd.com](images_presentation/levels-of-evidence.svg)
@@ -87,7 +89,7 @@ But what happens when is not feasible to conduct an RCT because of ethical issue
 
 :::
 
-
+-->
 
 
 ## Causal Effect Estimation
@@ -268,11 +270,12 @@ library(tidyverse)
 
 Propensity scores help us deal with the challenge of selection.
 
-The propensity score is an individual’s probability of receiving the treatment given pretreatment characteristics^[Narita, K., et al. The Leadership Quarterly 2023, 101678.]
+- The propensity score is an individual’s probability of receiving the treatment given pretreatment characteristics^[Narita, K., et al. The Leadership Quarterly 2023, 101678.]
 
 $$P(X) = Pr(Z=1 | X)$$
 
-Used to create balance between treatment and comparison conditons. Balancing on $P(X)$ can balance distribution of $X$ between treatment and comparison group.
+- Used to create balance between treatment and comparison conditons. 
+- Balancing on $P(X)$ can balance distribution of $X$ between treatment and comparison group.
 
 ::: {.notes}
 Omiting the strong ignorability assumption, the propensity score is the probability of receiving the treatment given the observed covariates.
